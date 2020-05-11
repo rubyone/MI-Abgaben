@@ -95,20 +95,12 @@ public class Abgabe1 extends JFrame{
     }
 
     private void setValueDown() {
-
-
             this.value -=step;
             repaint();
-
     }
 
     public int getValue() {
-//        if (value <= 0) {
-//             value = 0;
-//
-//        } else if ( value >= 255) {
-//             value = 255;
-//        }
+
         return value;
     }
 
@@ -145,9 +137,10 @@ class CircleFrame extends JPanel{
         int i = Abgabe1.value;
 
         System.out.println("Value: " + i);
+
         if (i <= 0) {
             i = 0;
-        } else if ( i >= 255) {
+        } else if ( i >= 255    ) {
             i = 255;
         }
         Color c =  new Color(255, 255, 255, i);
