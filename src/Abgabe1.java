@@ -5,13 +5,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public class Abgabe1 extends JFrame{
 
-    public static int value;
+    public static int value = 20;
     public static int step = 20;
 
     private boolean isDraw = false;
@@ -19,6 +17,7 @@ public class Abgabe1 extends JFrame{
     private JButton draw;
     private JButton up;
     private JButton down;
+    private JButton seen;
 
 
 
@@ -30,34 +29,19 @@ public class Abgabe1 extends JFrame{
         BorderLayout bord = new BorderLayout(); //you never use bord
         setLayout(bord);  //BTW BorderLayout is the default for JFrame content pane
 
-
-
-
-        //you do not want to add a new panel with every button click so it
-        //should NOT be triggered by the action listener
         cf = new CircleFrame();
         add(cf, BorderLayout.CENTER);
 
-        //creating a button
-//        draw = new JButton("Draw");
-//        up = new JButton("Up");
-
-
-
-        //you also need to add the button
-
-//        add(draw, BorderLayout.PAGE_END);/**/
-
-
         JPanel subPanel = new JPanel();
-
+        subPanel.add( draw = new JButton( "Start" ));
         subPanel.add( up = new JButton( "Up" ));
-        subPanel.add( draw = new JButton( "Draw" ));
         subPanel.add( down = new JButton( "Down" ));
+        subPanel.add( seen = new JButton( "Veränderung gesehen!" ));
 
         draw.addActionListener(event ->  toggleDrawErase() );
         up.addActionListener(event ->  setValueUp() );
         down.addActionListener(event ->  setValueDown() );
+        seen.addActionListener(event ->  printAnswer() );
 
         add(subPanel, BorderLayout.PAGE_END);
 
@@ -66,57 +50,47 @@ public class Abgabe1 extends JFrame{
 
     }
 
+    private void printAnswer() {
 
+        System.out.println("Value: " + Abgabe1.value + " wurde gesehen!");
 
-    private void down() {
-        System.out.println("Down");
     }
-
-    private void up() {
-//        repaint();
-        System.out.println("Up");
-    }
-
 
     private void toggleDrawErase() {
+
         isDraw = ! isDraw;
         cf.setDraw(isDraw);
 
-        draw.setText(isDraw ?  "Erase" : "Draw");
+        draw.setText(isDraw ?  "Stop" : "Start");
+        if (draw.getText().equals("Stop")) {
+            draw.setForeground(Color.red);
+        } else {
+            this.value = 20;
+            draw.setForeground(Color.black);
+        }
         repaint();
     }
 
-
-
     private void setValueUp() {
-        this.value +=step;
+        this.value =  this.value > 255 ? 255 : (this.value += step);
         repaint();
 
     }
 
     private void setValueDown() {
-            this.value -=step;
-            repaint();
+        this.value =  this.value < 0 ? 0 : (this.value -= step);
+        repaint();
     }
-
-    public int getValue() {
-
-        return value;
-    }
-
 
     public static void main(String[] arguments){
         new Abgabe1();
     }
-
 
 }
 
 class CircleFrame extends JPanel{
 
     private boolean isDraw = false;
-
-
 
     public CircleFrame(){
 
@@ -128,30 +102,30 @@ class CircleFrame extends JPanel{
     @Override
     public void paintComponent(Graphics comp){
 
-
         super.paintComponent(comp);
+
+        if (!isDraw()) {
+            comp.setColor(Color.red);
+            comp.drawString("X" , 247 ,255);
+        }
+
         if(! isDraw() ) return;
         Graphics2D comp2D = (Graphics2D) comp;
 
-
         int i = Abgabe1.value;
+
+        if (i < 0) {
+            i = 0;
+        } else if ( i > 255 ) {
+            i = 255;
+        }
 
         System.out.println("Value: " + i);
 
-        if (i <= 0) {
-            i = 0;
-        } else if ( i >= 255    ) {
-            i = 255;
-        }
         Color c =  new Color(255, 255, 255, i);
-
-
-
         comp2D.setColor(c);
 
-        comp2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-        Ellipse2D.Float circle = new Ellipse2D.Float(250, 250, 20, 20);
+        Ellipse2D.Float circle = new Ellipse2D.Float(250, 250, 2, 2);
         comp2D.fill(circle);
     }
 
