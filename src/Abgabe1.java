@@ -34,8 +34,8 @@ public class Abgabe1 extends JFrame{
 
         JPanel subPanel = new JPanel();
         subPanel.add( draw = new JButton( "Start" ));
-        subPanel.add( up = new JButton( "Up" ));
-        subPanel.add( down = new JButton( "Down" ));
+        subPanel.add( up = new JButton( "Heller" ));
+        subPanel.add( down = new JButton( "Dunkler" ));
         subPanel.add( seen = new JButton( "Veränderung gesehen!" ));
 
         draw.addActionListener(event ->  toggleDrawErase() );
@@ -93,8 +93,10 @@ class CircleFrame extends JPanel{
     private boolean isDraw = false;
 
     public CircleFrame(){
-
-        setPreferredSize(new Dimension(500, 500));
+//        System.out.println(getMaximumSize().height.);
+        int w = 1920;
+        int h= 1200;
+        setPreferredSize(new Dimension(w, h));
         setBackground(Color.black);
 
     }
@@ -105,8 +107,10 @@ class CircleFrame extends JPanel{
         super.paintComponent(comp);
 
         if (!isDraw()) {
+            comp.setColor(Color.white);
+            comp.drawString("Klicken Sie auf Start, wenn Sie den Punkt sehen bzw. nicht sehen klicken Sie solange auf heller/dunkler bis Sie eine Veränderung wahrgenommen haben und klicken dann auf Veränderung gesehen!" , 100 ,200);
             comp.setColor(Color.red);
-            comp.drawString("X" , 247 ,255);
+            comp.drawString("X" , 600 ,350);
         }
 
         if(! isDraw() ) return;
